@@ -1,0 +1,4 @@
+# Copy to .dev.vars for local development (never commit .dev.vars)
+# Generate hash: npm run hash-password -- "tu-contraseña"
+ADMIN_PASSWORD_HASH=$2b$10$SSDsNeK8gSY2FMmHURQseeULHP02xEkzTVc07A8hN3vrKfwU1XwIi
+SESSION_SECRET=dev-secret-at-least-32-characters-long!!

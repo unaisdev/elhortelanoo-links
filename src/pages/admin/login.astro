@@ -1,0 +1,39 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import LoginForm from '../../components/admin/LoginForm';
+import { getEnv } from '../../lib/auth';
+import { isAuthenticated } from '../../lib/session';
+
+const env = getEnv();
+const authed = await isAuthenticated(Astro.request, env.SESSION_SECRET);
+if (authed) {
+  return Astro.redirect('/admin');
+}
+---
+
+<Layout title="Admin · elhortelanoo">
+  <main class="page-shell login-page">
+    <h1>Admin</h1>
+    <p>Acceso solo para elhortelanoo</p>
+    <LoginForm client:load />
+  </main>
+</Layout>
+
+<style>
+  .login-page {
+    text-align: center;
+  }
+
+  h1 {
+    margin: 0 0 0.4rem;
+    font-size: 2rem;
+    letter-spacing: -0.03em;
+  }
+
+  p {
+    margin: 0 0 1.5rem;
+    color: var(--text-muted);
+  }
+</style>

@@ -1,0 +1,99 @@
+---
+import { resolveLinkIcon } from '../lib/favicon';
+
+interface Props {
+  title: string;
+  url: string;
+  iconUrl?: string;
+  index?: number;
+}
+
+const { title, url, iconUrl = '', index = 0 } = Astro.props;
+const resolvedIcon = resolveLinkIcon(iconUrl, url);
+---
+
+<a
+  class="link-btn"
+  href={url}
+  target="_blank"
+  rel="noopener noreferrer"
+  style={`--i: ${index}`}
+>
+  {
+    resolvedIcon ? (
+      <img
+        class="icon"
+        src={resolvedIcon}
+        alt=""
+        width="28"
+        height="28"
+        loading="lazy"
+        decoding="async"
+      />
+    ) : (
+      <span class="icon-fallback" aria-hidden="true" />
+    )
+  }
+  <span class="label">{title}</span>
+</a>
+
+<style>
+  .link-btn {
+    display: grid;
+    grid-template-columns: 2rem 1fr 2rem;
+    align-items: center;
+    width: 100%;
+    min-height: 3.6rem;
+    padding: 0.75rem 1rem;
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: #152018;
+    font-weight: 600;
+    text-align: center;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    transition:
+      transform 0.18s ease,
+      background 0.18s ease,
+      box-shadow 0.18s ease;
+    animation: rise 0.55s ease both;
+    animation-delay: calc(0.08s * var(--i) + 0.15s);
+  }
+
+  .icon,
+  .icon-fallback {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 0.4rem;
+    object-fit: contain;
+    justify-self: start;
+  }
+
+  .icon-fallback {
+    background: rgba(21, 32, 24, 0.08);
+  }
+
+  .label {
+    grid-column: 2;
+  }
+
+  .link-btn:hover {
+    background: var(--surface-hover);
+    transform: translateY(-2px) scale(1.01);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.24);
+  }
+
+  .link-btn:active {
+    transform: translateY(0) scale(0.99);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+</style>

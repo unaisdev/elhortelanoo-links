@@ -1,0 +1,24 @@
+---
+export const prerender = false;
+
+import Layout from '../../layouts/Layout.astro';
+import AdminPanel from '../../components/admin/AdminPanel';
+import { getEnv } from '../../lib/auth';
+import { getAllLinks, getProfile } from '../../lib/db';
+import { isAuthenticated } from '../../lib/session';
+
+const env = getEnv();
+const authed = await isAuthenticated(Astro.request, env.SESSION_SECRET);
+if (!authed) {
+  return Astro.redirect('/admin/login');
+}
+
+const profile = await getProfile(env.DB);
+const links = await getAllLinks(env.DB);
+---
+
+<Layout title="Admin · elhortelanoo">
+  <main class="page-shell">
+    <AdminPanel client:load initialProfile={profile} initialLinks={links} />
+  </main>
+</Layout>
